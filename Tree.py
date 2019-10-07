@@ -1,4 +1,5 @@
-import numpy as np
+import math 
+import queue
 def k():
     return 3
 
@@ -53,23 +54,96 @@ class KD:
         print("(",root.rgb_value[0],root.rgb_value[1],root.rgb_value[2],")")
         self.Inorder(root.right)
 
+    def LevelOrder(self,root):
+        q=queue.Queue(maxsize=20)
+        q.put(root)
+        while(q.empty()!=1):
+            temp=q.get()
+            print(temp.rgb_value)
+            if(temp.left!=None):
+                q.put(temp.left)
+            if(temp.right!=None):
+                q.put(temp.right)
     
+    def distance(self,root1,root2):
+        a=root1.rgb_value
+        b=root2
+
+        # print(a,b)
+        dist=0
+        for x in range(len(a)):
+            dist+=(a[x]-b[x])**2
+        
+        return math.sqrt(abs(dist))
+    
+    currentBest=0
+    nearestDistance=100000
+
+    def nearestNeighbour(self,root,color):
+        if root==None:
+            return 
+        
+        else:
+            root_distance=self.distance(root,color)
+
+        if root.left==None and root.right==None:
+            if(self.nearestDistance>root_distance):
+                self.currentBest=root
+                self.nearestDistance=root_distance
+            return
+        
+        if root.left!=None:
+            left_distance=self.distance(root.left,color)
+        
+        else :
+            left_distance=100000
+
+        if root.right!=None:
+            right_distance=self.distance(root.right,color)
+        
+        else:
+            right_distance=100000
+
+        if left_distance < right_distance:
+            minChildDistance=left_distance
+            currentBest=root.left
+        else:
+            minChildDistance=right_distance
+            currentBest=root.right
+
+        if root_distance>minChildDistance:
+            if(self.nearestDistance>minChildDistance):   
+                self.currentBest=currentBest
+                self.nearestDistance=minChildDistance
+            self.nearestNeighbour(currentBest,color)
+        else:
+            if(self.nearestDistance>root_distance):   
+                self.currentBest=root
+                self.nearestDistance=root_distance
+            self.nearestNeighbour(currentBest,color)
+
   
 if __name__ == "__main__":
    
     t = KD((5,1,1))
 
-    points=np.array( [ (9, 3 ,6),(7, 9 ,8),(1, 7 ,3),(3, 8 ,9),(6, 5 ,1),(8, 3 ,6) ])
+    points= [ (9, 3 ,6),(7, 9 ,8),(1, 7 ,3),(3, 8 ,9),(6, 5 ,1),(8, 3 ,6) ]
     
-    no_elts=points.shape[0]
+    no_elts=6
     
     for i in range(no_elts):
         t.root= t.insert(t.root,points[i])
         
-    t.Inorder(t.root)
+    t.LevelOrder(t.root)
+
+    t.nearestNeighbour(t.root,(10,4,3))
     
-    p1=np.array( (9,3,6) )
-    p2=np.array( (2,2,1) )
+    m=t.currentBest.rgb_value
+
+    print("Nearest of (10,4,3) is "+ str(m))
+
+    p1= (9,3,6) 
+    p2= (2,2,1) 
     
     test=[p1,p2]
     for i in test:
