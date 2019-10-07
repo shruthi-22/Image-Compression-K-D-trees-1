@@ -3,42 +3,42 @@ def k():
     return 3
 
 class Node:
-    def __init__(self,pt):
-        self.point=pt
+    def __init__(self,value):
+        self.rgb_value=value
         self.left=None
         self.right=None
 class KD:
-    def __init__(self,pt):
-        self.root=Node(pt)
+    def __init__(self,value):
+        self.root=Node(value)
    
-    def insRec(self,root,pt,depth):
+    def insRec(self,root,value,depth):
         if(root==None):
-            return Node(pt)
+            return Node(value)
         cd =depth % k()
         
-        if(pt[cd] < root.point[cd]):
-            root.left=self.insRec(root.left,pt,depth+1)
+        if(value[cd] < root.rgb_value[cd]):
+            root.left=self.insRec(root.left,value,depth+1)
         else:
-            root.right=self.insRec(root.right,pt,depth+1)
+            root.right=self.insRec(root.right,value,depth+1)
         return root
     
-    def insert(self,root,pt):
-        return self.insRec(root,pt,0)
+    def insert(self,root,value):
+        return self.insRec(root,value,0)
     
-    def searchRec(self,root,pt,depth):
+    def searchRec(self,root,value,depth):
         if(root==None):
             return False
-        if(self.arePoints_Same(root.point,pt)):
+        if(self.arePoints_Same(root.rgb_value,value)):
                 return True;
         cd =depth % k()
         
-        if(pt[cd] < root.point[cd]): 
-            return self.searchRec(root.left,pt,depth+1)
+        if(value[cd] < root.rgb_value[cd]): 
+            return self.searchRec(root.left,value,depth+1)
         else:
-            return self.searchRec(root.right,pt,depth+1)
+            return self.searchRec(root.right,value,depth+1)
     
-    def Search(self,root,pt):
-        return self.searchRec(root,pt,0)
+    def Search(self,root,value):
+        return self.searchRec(root,value,0)
     
     def arePoints_Same(self,p1,p2):
         for i in range(k()):
@@ -50,13 +50,15 @@ class KD:
         if(root==None):
             return 0
         self.Inorder(root.left)
-        print("(",root.point[0],root.point[1],root.point[2],")")
+        print("(",root.rgb_value[0],root.rgb_value[1],root.rgb_value[2],")")
         self.Inorder(root.right)
+
+    
   
 if __name__ == "__main__":
    
     t = KD([5,1,1])
-    #t.root= Node(None)
+
     points=np.array( [ [9, 3 ,6],[7, 9 ,8],[1, 7 ,3],[3, 8 ,9],[6, 5 ,1],[4, 4 ,0],[ 2, 2 ,1],[ 5, 4 ,2],[8, 3 ,6] ])
     
     no_elts=points.shape[0]
@@ -65,6 +67,7 @@ if __name__ == "__main__":
         t.root= t.insert(t.root,points[i])
         
     t.Inorder(t.root)
+    
     p1=np.array( [9,9,9] )
     p2=np.array( [2,2,1] )
     
