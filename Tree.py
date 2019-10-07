@@ -57,9 +57,9 @@ class KD:
   
 if __name__ == "__main__":
    
-    t = KD([5,1,1])
+    t = KD((5,1,1))
 
-    points=np.array( [ [9, 3 ,6],[7, 9 ,8],[1, 7 ,3],[3, 8 ,9],[6, 5 ,1],[4, 4 ,0],[ 2, 2 ,1],[ 5, 4 ,2],[8, 3 ,6] ])
+    points=np.array( [ (9, 3 ,6),(7, 9 ,8),(1, 7 ,3),(3, 8 ,9),(6, 5 ,1),(8, 3 ,6) ])
     
     no_elts=points.shape[0]
     
@@ -68,8 +68,8 @@ if __name__ == "__main__":
         
     t.Inorder(t.root)
     
-    p1=np.array( [9,9,9] )
-    p2=np.array( [2,2,1] )
+    p1=np.array( (9,3,6) )
+    p2=np.array( (2,2,1) )
     
     test=[p1,p2]
     for i in test:
