@@ -79,18 +79,18 @@ class KD:
     currentBest=0
     nearestDistance=1000000000000000
 
-    def nearestNeighbour(self,root,color):
+    def nearestNeighbour(self,root,color,currentBest_,nearestDistance):
         if root==None:
-            return 
+            return [currentBest_.rgb_value,nearestDistance]
         
         else:
             root_distance=self.distance(root,color)
 
         if root.left==None and root.right==None:
-            if(self.nearestDistance>root_distance):
-                self.currentBest=root
-                self.nearestDistance=root_distance
-            return
+            if(nearestDistance>root_distance):
+                currentBest_=root
+                nearestDistance=root_distance
+            return [currentBest_.rgb_value,nearestDistance]
         
         if root.left!=None:
             left_distance=self.distance(root.left,color)
@@ -111,23 +111,24 @@ class KD:
             minChildDistance=right_distance
             currentBest=root.right
 
-        print(root_distance,left_distance,right_distance)
+        # print(root_distance,left_distance,right_distance)
 
         if root_distance>minChildDistance:
-            if(self.nearestDistance>minChildDistance):   
-                self.currentBest=currentBest
-                self.nearestDistance=minChildDistance
-            self.nearestNeighbour(currentBest,color)
+            if(nearestDistance>minChildDistance):   
+                currentBest_=currentBest
+                nearestDistance=minChildDistance
+            m=self.nearestNeighbour(currentBest,color,currentBest_,nearestDistance)
+            currentBest_.rgb_value=m[0]
+            nearestDistance=m[1]
         else:
-            if(self.nearestDistance>root_distance):   
-                self.currentBest=root
-                self.nearestDistance=root_distance
-            self.nearestNeighbour(currentBest,color)
-
-    def nearestNeighbourfunction(self,color):
-        self.nearestNeighbour(self.root,color)
-        # print(self.currentBest.rgb_value)
-        return self.currentBest.rgb_value
+            if(nearestDistance>root_distance):   
+                currentBest_=root
+                nearestDistance=root_distance
+            m=self.nearestNeighbour(currentBest,color,currentBest_,nearestDistance)
+            currentBest_.rgb_value=m[0]
+            nearestDistance=m[1]
+        
+        return [currentBest_.rgb_value,nearestDistance]
 
 from PIL import Image
 
@@ -135,45 +136,42 @@ if __name__ == "__main__":
     t=KD([0,0,0]) #black
     import csv
     points=[]
-    with open('CSS140.txt','r')as f:
+    with open('data.csv','r')as f:
         data = csv.reader(f, quoting=csv.QUOTE_NONNUMERIC)
         for row in data:
             row=[int(x) for x in row]
             points.append(row)
     for i in range(len(points)):
         t.root= t.insert(t.root,points[i])
-    t.LevelOrder(t.root)
-    # t.nearestNeighbour(t.root,(213,85,10))
 
-    # print(t.currentBest.rgb_value)
+    im=Image.open('Firefox_wallpaper.png')
+    pix = im.load()
 
-    # im=Image.open('index.jpeg')
-    # pix = im.load()
+    for x in range(im.size[0]):
+        for y in range(im.size[1]):
+            m=pix[x,y]
+            print(m,end=' ')
+            n=t.nearestNeighbour(t.root,m,0,1000000)
+            pix[x,y]=tuple(n[0])
+            print(pix[x,y])
 
-    # for x in range(im.size[0]):
-    #     for y in range(im.size[1]):
-    #         m=pix[x,y]
-    #         pix[x,y]=t.nearestNeighbourfunction(m)
-
-    # im.save('changed.png')
+    im.save('changed1.png')
 
 
-#     t = KD((5,1,1))
+    # t = KD((5,1,1))
 
-#     points= [ (9, 3 ,6),(7, 9 ,8),(1, 7 ,3),(3, 8 ,9),(6, 5 ,1),(8, 3 ,6) ]
+    # points= [ (9, 3 ,6),(7, 9 ,8),(1, 7 ,3),(3, 8 ,9),(6, 5 ,1),(8, 3 ,6) ]
     
-#     no_elts=6
+    # no_elts=6
     
-#     for i in range(no_elts):
-#         t.root= t.insert(t.root,points[i])
+    # for i in range(no_elts):
+    #     t.root= t.insert(t.root,points[i])
         
-#     t.LevelOrder(t.root)
+    # t.LevelOrder(t.root)
 
-#     t.nearestNeighbour(t.root,(10,4,3))
+    # m=t.nearestNeighbour(t.root,(10,4,3),0,100000000)
     
-#     m=t.currentBest.rgb_value
-
-#     print("Nearest of (10,4,3) is "+ str(m))
+    # print("Nearest of (10,4,3) is "+ str(m))
 
 #     p1= (9,3,6) 
 #     p2= (2,2,1) 
