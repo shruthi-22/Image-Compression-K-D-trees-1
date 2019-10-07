@@ -1,18 +1,23 @@
 import math 
+
 import queue
+
 def k():
     return 3
 
-class Node:
+class Node:    #Base Node
+    
     def __init__(self,value):
-        self.rgb_value=value
+        self.rgb_value=value    #For Storing the RGB value of Named CSS
         self.left=None
         self.right=None
+
 class KD:
+
     def __init__(self,value):
         self.root=Node(value)
    
-    def insRec(self,root,value,depth):
+    def insRec(self,root,value,depth): #Insertion x,y,z Partitioning 
         if(root==None):
             return Node(value)
         cd =depth % k()
@@ -26,11 +31,14 @@ class KD:
     def insert(self,root,value):
         return self.insRec(root,value,0)
     
-    def searchRec(self,root,value,depth):
+    def searchRec(self,root,value,depth): #Searching for an element in the partitioned Set
+        
         if(root==None):
             return False
+        
         if(self.arePoints_Same(root.rgb_value,value)):
                 return True;
+        
         cd =depth % k()
         
         if(value[cd] < root.rgb_value[cd]): 
@@ -79,9 +87,10 @@ class KD:
     currentBest=0
     nearestDistance=1000000000000000
 
-    def nearestNeighbour(self,root,color,currentBest_,nearestDistance):
+    def nearestNeighbour(self,root,r,g,b,currentBest_,nearestDistance):
+        color=(r,g,b)
         if root==None:
-            return [currentBest_.rgb_value,nearestDistance]
+            return tuple([currentBest_.rgb_value,nearestDistance])
         
         else:
             root_distance=self.distance(root,color)
@@ -90,7 +99,7 @@ class KD:
             if(nearestDistance>root_distance):
                 currentBest_=root
                 nearestDistance=root_distance
-            return [currentBest_.rgb_value,nearestDistance]
+            return tuple([currentBest_.rgb_value,nearestDistance])
         
         if root.left!=None:
             left_distance=self.distance(root.left,color)
@@ -117,46 +126,18 @@ class KD:
             if(nearestDistance>minChildDistance):   
                 currentBest_=currentBest
                 nearestDistance=minChildDistance
-            m=self.nearestNeighbour(currentBest,color,currentBest_,nearestDistance)
+            m=self.nearestNeighbour(currentBest,r,g,b,currentBest_,nearestDistance)
             currentBest_.rgb_value=m[0]
             nearestDistance=m[1]
         else:
             if(nearestDistance>root_distance):   
                 currentBest_=root
                 nearestDistance=root_distance
-            m=self.nearestNeighbour(currentBest,color,currentBest_,nearestDistance)
+            m=self.nearestNeighbour(currentBest,r,g,b,currentBest_,nearestDistance)
             currentBest_.rgb_value=m[0]
             nearestDistance=m[1]
         
-        return [currentBest_.rgb_value,nearestDistance]
-
-from PIL import Image
-
-if __name__ == "__main__":
-    t=KD([0,0,0]) #black
-    import csv
-    points=[]
-    with open('data.csv','r')as f:
-        data = csv.reader(f, quoting=csv.QUOTE_NONNUMERIC)
-        for row in data:
-            row=[int(x) for x in row]
-            points.append(row)
-    for i in range(len(points)):
-        t.root= t.insert(t.root,points[i])
-
-    im=Image.open('Firefox_wallpaper.png')
-    pix = im.load()
-
-    for x in range(im.size[0]):
-        for y in range(im.size[1]):
-            m=pix[x,y]
-            print(m,end=' ')
-            n=t.nearestNeighbour(t.root,m,0,1000000)
-            pix[x,y]=tuple(n[0])
-            print(pix[x,y])
-
-    im.save('changed1.png')
-
+        return tuple([currentBest_.rgb_value,nearestDistance])
 
     # t = KD((5,1,1))
 
