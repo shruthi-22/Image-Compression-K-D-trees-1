@@ -51,7 +51,7 @@ C. I would change the query color to the nearest neighbour color in the Set S.
 This results in an image with only named colors (or colors in Set S).
 Also the size of the image reduces (lossy compression though).
 
-<h2>This image was converted to named CSS set of 140 colors</h2>
+<h2>This image was converted to named CSS set of 16 colors</h2>
 <img src="Ouput.png" width=800 height=500/>
 
 # <h2>Required Packages
