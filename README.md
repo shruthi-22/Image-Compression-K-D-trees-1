@@ -52,7 +52,7 @@ This results in an image with only named colors (or colors in Set S).
 Also the size of the image reduces (lossy compression though).
 
 <h2>This image was converted to named CSS set of 140 colors</h2>
-<img src="Output.png">
+<img src="Output.png" width=800 height=500>
 
 # <h2>Required Packages
 
