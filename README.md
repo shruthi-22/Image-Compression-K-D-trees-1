@@ -53,3 +53,10 @@ Also the size of the image reduces (lossy compression though).
 
 <h2>This image was converted to named CSS set of 140 colors</h2>
 <img src="Output.png">
+
+# <h2>Required Packages
+
+* PyQt5
+* PIL
+
+<h5>Please install the packages and to start the application run the RunApplication.py file </h5> 
