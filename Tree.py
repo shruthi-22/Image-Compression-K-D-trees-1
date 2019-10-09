@@ -203,7 +203,17 @@ class KD:
 #             print("FOUND")
 #         else:
 #             print("NOT FOUND")
-    
+
+
+#Median using median finding algorithm in O(n)
+# Algo:
+#             m=median(list,depth)
+#             left_list=less elts to median with respect ot depth
+#             right_list=greater elements to median with respect to depth
+#             root->left=insert(root->left,list)
+#             root->right=insert(root->right,list)
+#             return root
+#Do deletion as well    
     
     
     
