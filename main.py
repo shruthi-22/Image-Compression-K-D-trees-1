@@ -4,7 +4,7 @@ from Tree import KD
 import time 
 
 
-t = KD([0, 0, 0])  # black
+t = KD()  # black
 # points = []
 # with open('css16.txt', 'r')as f:
 #     data = csv.reader(f, quoting=csv.QUOTE_NONNUMERIC)
