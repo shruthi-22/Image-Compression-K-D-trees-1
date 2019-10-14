@@ -119,7 +119,7 @@ class Ui_MainWindow(object):
                     row = [int(x) for x in row]
                     points.append(row)
             for i in range(len(points)):
-                main.t.root = main.t.insert(main.t.root, points[i])
+                main.t.root = main.t.insert(main.t.root, points,0)
             QtWidgets.QMessageBox.about(None,"Import","Imported the Data Successfully")
         
     def retranslateUi(self, MainWindow):
