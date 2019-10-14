@@ -5,6 +5,28 @@ import queue
 def k():
     return 3
 
+import random
+
+def quickselect_median(l,d, pivot_fn=random.choice):
+    return quickselect(l,d, len(l) // 2, pivot_fn)
+
+def quickselect(l,d, k, pivot_fn):
+    if len(l) == 1:
+        assert k == 0
+        return l[0]
+    col= [el[d] for el in l]
+    pivot = pivot_fn(col)
+    lows = [el for el in l if el[d] < pivot]
+    highs = [el for el in l if el[d] > pivot]
+    pivots = [el for el in l if el[d] == pivot]
+
+    if k < len(lows):
+        return quickselect(lows,d, k, pivot_fn)
+    elif k < len(lows) + len(pivots):
+        return pivots[k-len(lows)]
+    else:
+        return quickselect(highs,d, k - len(lows)-len(pivots) , pivot_fn)
+
 class Node:    #Base Node
     
     def __init__(self,value):
@@ -14,23 +36,31 @@ class Node:    #Base Node
 
 class KD:
 
-    def __init__(self,value):
-        self.root=Node(value)
-   
-    def insRec(self,root,value,depth): #Insertion x,y,z Partitioning 
-        if(root==None):
-            return Node(value)
-        cd =depth % k()
+    def __init__(self):
+        self.root=None
         
-        if(value[cd] < root.rgb_value[cd]):
-            root.left=self.insRec(root.left,value,depth+1)
-        else:
-            root.right=self.insRec(root.right,value,depth+1)
+    
+
+    def insert(self,root,color_data,depth):
+        depth=depth%3
+        root=Node(quickselect_median(color_data,depth))
+        # print(root.rgb_value)
+        left_list=[]
+        right_list=[]
+        for x in color_data:
+            if(x[depth]<root.rgb_value[depth]):
+                left_list.append(x)
+            elif(x[depth]>=root.rgb_value[depth] and x!=root.rgb_value):
+                right_list.append(x)
+        # print("left_list",left_list)
+        # print("right_list",right_list)
+        if(len(left_list)!=0):
+            root.left=self.insert(root.left,left_list,depth+1)
+        if(len(right_list)!=0):
+            root.right=self.insert(root.right,right_list,depth+1)
+    
         return root
-    
-    def insert(self,root,value):
-        return self.insRec(root,value,0)
-    
+        
     def searchRec(self,root,value,depth): #Searching for an element in the partitioned Set
         
         if(root==None):
@@ -178,16 +208,19 @@ class KD:
         
     #     return tuple([currentBest_.rgb_value,nearestDistance])
 
-    # t = KD((5,1,1))
+# t = KD()
 
-    # points= [ (9, 3 ,6),(7, 9 ,8),(1, 7 ,3),(3, 8 ,9),(6, 5 ,1),(8, 3 ,6) ]
+# points= [ (9, 3 ,6),(7, 9 ,8),(1, 7 ,3),(3, 8 ,9),(6, 5 ,1),(8, 3 ,6) ]
+# # print(quickselect_median(points,0))
+# t.root=t.insert(t.root,points,0)
+
+# # print(t.root.rgb_value)
+#     # no_elts=6
     
-    # no_elts=6
-    
-    # for i in range(no_elts):
-    #     t.root= t.insert(t.root,points[i])
+#     # for i in range(no_elts):
+#     #     t.root= t.insert(t.root,points[i])
         
-    # t.LevelOrder(t.root)
+# t.LevelOrder(t.root)
 
     # m=t.nearestNeighbour(t.root,(10,4,3),0,100000000)
     
@@ -203,29 +236,3 @@ class KD:
 #             print("FOUND")
 #         else:
 #             print("NOT FOUND")
-
-
-#Median using median finding algorithm in O(n)
-# Algo:
-#             m=median(list,depth)
-#             left_list=less elts to median with respect ot depth
-#             right_list=greater elements to median with respect to depth
-#             root->left=insert(root->left,list)
-#             root->right=insert(root->right,list)
-#             return root
-#Do deletion as well    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
